@@ -20,9 +20,14 @@ public class JWTUtils {
     private String signatureAlgorithm = SignatureAlgorithm.HS256.getJcaName();
     // Our secret key
     private String encodedSecretKey = "AbCdEfGhIjKlMnOpQrStUvWxYz12345678901234567890";
-    // Our key used the signature algorithm and secret key from above
+    // the actual key, ciphered with the signature algorithm chosen above.
     private Key decodedSecretKey = new SecretKeySpec(Base64.getDecoder().decode(encodedSecretKey), this.signatureAlgorithm);
 
+    /**
+     * returns a JWT from userDetails.
+     * @param userDetails ID, password, email, and role.
+     * @return JWT signed with our key.
+     */
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userDetails.getId());
@@ -30,6 +35,12 @@ public class JWTUtils {
         return createToken(claims, userDetails.getEmail());
     }
 
+    /**
+     * creates JWT from claims and subject.
+     * @param claims desired body of the JWT.
+     * @param email desired subject of the JWT.
+     * @return JWT signed with our key.
+     */
     private String createToken(Map<String, Object> claims, String email) {
         Instant now = Instant.now();
         return Jwts.builder()
@@ -41,34 +52,55 @@ public class JWTUtils {
                 .compact();
     }
 
-    private Claims extractAllClaims(String token) throws ExpiredJwtException {
-        JwtParser jwtParser = Jwts.parserBuilder()
-                .setSigningKey(this.decodedSecretKey)
-                .build();
-        return jwtParser.parseClaimsJws(token).getBody();
+    /**
+     * returns the claims of a given JWT.
+     * @param token JWT.
+     * @return JWT's claims.
+     * @throws JwtException if JWT is invalid.
+     */
+    private Claims extractAllClaims(String token) throws JwtException {
+        try
+        {
+            JwtParser jwtParser = Jwts.parserBuilder()
+                    .setSigningKey(this.decodedSecretKey)
+                    .build();
+            return jwtParser.parseClaimsJws(token).getBody();
+        }
+        catch (ExpiredJwtException e) {
+            throw new JwtException("invalid token");
+        }
     }
 
-    private String extractEmail(String token) {
+    /**
+     * get email from JWT
+     * @param token JWT
+     * @return client's email.
+     * @throws JwtException if JWT is invalid.
+     */
+    private String extractEmail(String token) throws JwtException{
         return extractAllClaims(token).getSubject();
     }
 
-    private Date extractExpiration(String token) {
+    /**
+     * get expiration date from JWT.
+     * @param token JWT.
+     * @return expiration of JWT.
+     * @throws JwtException if JWT is invalid.
+     */
+    private Date extractExpiration(String token) throws JwtException {
         return extractAllClaims(token).getExpiration();
     }
 
-    private boolean isTokenExpired(String token) {
-        try {
-            extractAllClaims(token);
-            return false;
-        } catch (ExpiredJwtException err) {
-            return true;
-        }
-    }
 
+
+    /**
+     * validates JWT, and returns userDetails.
+     * @param token a JWT
+     * @return the userDetails inside the JWT, if it was valid.
+     * @throws JwtException if JWT is invalid.
+     */
     public UserDetails validateToken(String token) throws JwtException {
-        if (isTokenExpired(token)) {
-            throw new JwtException("Token is invalid");
-        }
+
         Claims claims = extractAllClaims(token);
         return new UserDetails(claims.getSubject(), "*******", claims.get("role", String.class), claims.get("id", Integer.class));
     }

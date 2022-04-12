@@ -19,6 +19,9 @@ public class ExpirationDailyJob {
     @Autowired
     CouponRepo couponRepo;
 
+    /**
+     * deletes all expired coupons, and deletes all their purchase instances from the database.
+     */
     @Async
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Jerusalem")
     public void deleteByEndDateBefore() {

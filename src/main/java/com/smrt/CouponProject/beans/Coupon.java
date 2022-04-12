@@ -17,7 +17,7 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Company ID
+    // ID of company owning this coupon
     @Column(name = "company_id", nullable = false)
     private int companyID;
 

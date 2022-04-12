@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Company {
-
     // Company ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +29,7 @@ public class Company {
     @Column(nullable = false, length = 25)
     private String password;
 
-    // Company coupon list
+    // List of the company's coupons
     @Singular
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Coupon> coupons;

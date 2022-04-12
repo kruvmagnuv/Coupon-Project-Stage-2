@@ -34,7 +34,7 @@ public class Customer {
     @Column(nullable = false, length = 25)
     private String password;
 
-    // Customer coupon list
+    // Customer purchased coupons list
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Singular
     private List<Coupon> coupons;
