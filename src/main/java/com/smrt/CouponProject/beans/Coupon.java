@@ -1,5 +1,6 @@
 package com.smrt.CouponProject.beans;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;

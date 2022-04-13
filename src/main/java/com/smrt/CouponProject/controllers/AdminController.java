@@ -82,7 +82,7 @@ public class AdminController {
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
-    @DeleteMapping("deleteCompany/{id}")
+    @DeleteMapping("deleteCompany/{companyId}")
     public ResponseEntity<?> deleteCompany(@RequestHeader(name = "Authorization") String token, @PathVariable int companyID) throws AdministrationException, LoginException, JwtException {
          UserDetails userDetails=jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
@@ -117,7 +117,7 @@ public class AdminController {
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
-    @GetMapping("getCompany/{id}")
+    @GetMapping("getCompany/{companyId}")
     public ResponseEntity<?> getOneCompany(@RequestHeader(name = "Authorization") String token, @PathVariable int companyID) throws AdministrationException, LoginException, JwtException {
          UserDetails userDetails=jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
@@ -171,7 +171,7 @@ public class AdminController {
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
-    @DeleteMapping("deleteCustomer/{id}")
+    @DeleteMapping("deleteCustomer/{customerId}")
     public ResponseEntity<?> deleteCustomer(@RequestHeader(name = "Authorization") String token, @PathVariable int customerID) throws AdministrationException, LoginException, JwtException {
          UserDetails userDetails=jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
@@ -206,7 +206,7 @@ public class AdminController {
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
-    @GetMapping("getCustomer/{id}")
+    @GetMapping("getCustomer/{customerId}")
     public ResponseEntity<?> getOneCustomer(@RequestHeader(name = "Authorization") String token, @PathVariable int customerID) throws AdministrationException, LoginException, JwtException {
          UserDetails userDetails=jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {

@@ -90,7 +90,7 @@ public class CompanyController {
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
-    @DeleteMapping("deleteCoupon/{id}")
+    @DeleteMapping("deleteCoupon/{couponId}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public void deleteCoupon(@RequestHeader(name = "Authorization") String token, @PathVariable int couponId) throws LoginException, CompanyException, JwtException {
         UserDetails userDetails = jwtUtils.validateToken(token);

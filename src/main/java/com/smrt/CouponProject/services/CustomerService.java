@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +23,10 @@ public class CustomerService extends ClientService {
      * @return customer's ID.
      */
     public int login(String email, String password) {
-        // First, we check if there is a customer with those email and password
         if (customerRepo.existsCustomerByEmailAndPassword(email, password)) {
-            // And the function returns true
+
             return customerRepo.getCustomerByEmail(email).getId();
         }
-        // If there isn't a matching customer, the login failed and the function returns false
         return 0;
     }
 
@@ -41,32 +40,32 @@ public class CustomerService extends ClientService {
     public void purchaseCoupon(int customerID,int couponID) throws PurchaseException {
 
         // First, if the coupon ID doesn't exist (=coupon doesn't exists), you can't buy that coupon
-        if (!customerRepo.existsById(couponID)) {
+        Optional<Coupon> coupon = couponRepo.findById(couponID);
+        Customer customer = customerRepo.getById(customerID);
+        if (coupon.isEmpty()) {
             // An exception is thrown
             throw new PurchaseException(COUPON_NOT_EXIST_EXCEPTION+PURCHASE_EXCEPTION);
         }
         // Next, if the customer already bought that coupon, you can't buy that coupon
-        if (customerRepo.getById(customerID).getCoupons().contains(couponRepo.getById(couponID))) {
+        if (customer.getCoupons().contains(coupon.get())) {
             // An exception is thrown
             throw new PurchaseException(COUPON_PURCHASED_EXCEPTION+PURCHASE_EXCEPTION);
         }
         // Next, if the coupon amount is 0, you can't buy that coupon
-        if (!(couponRepo.getById(couponID).getAmount() > 0)) {
+        if (coupon.get().getAmount() <= 0) {
             // An exception is thrown
             throw new PurchaseException(COUPON_OUT_EXCEPTION+PURCHASE_EXCEPTION);
         }
         // Next, if the coupon end date already passed, you can't buy that coupon
-        if (couponRepo.getById(couponID).getEndDate().before(Date.valueOf(LocalDate.now()))) {
+        if (coupon.get().getEndDate().before(Date.valueOf(LocalDate.now()))) {
             // An exception is thrown
             throw new PurchaseException(COUPON_EXPIRED_EXCEPTION+PURCHASE_EXCEPTION);
         }
         // Now, we decrease the purchased coupon amount by 1
-        Coupon coupon = couponRepo.getById(couponID);
-        coupon.setAmount(coupon.getAmount() - 1);
-        couponRepo.saveAndFlush(coupon);
+        coupon.get().setAmount(coupon.get().getAmount() - 1);
+        couponRepo.saveAndFlush(coupon.get());
         // And finally purchasing the coupon
-        Customer customer = customerRepo.getById(customerID);
-        customer.getCoupons().add(coupon);
+        customer.getCoupons().add(coupon.get());
         customerRepo.saveAndFlush(customer);
 
     }

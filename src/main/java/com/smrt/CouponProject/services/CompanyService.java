@@ -20,14 +20,12 @@ public class CompanyService extends ClientService {
      * checks if the login arguments are correct.
      * @param email    company email.
      * @param password company password.
-     * @return whether arguments are correct.
+     * @return company's ID.
      */
     public int login(String email, String password) {
-        // First, we check if there is a company with those email and password
         if (companyRepo.existsCompanyByEmailAndPassword(email, password)) {
             return companyRepo.getByEmail(email).getId();
         }
-        // If there isn't a matching company, the login failed and the function returns false
         return 0;
     }
 
