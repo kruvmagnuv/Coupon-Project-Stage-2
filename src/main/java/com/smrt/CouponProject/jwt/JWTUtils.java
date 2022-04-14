@@ -66,7 +66,7 @@ public class JWTUtils {
                     .build();
             return jwtParser.parseClaimsJws(token).getBody();
         }
-        catch (ExpiredJwtException e) {
+        catch (Exception e) {
             throw new JwtException("invalid token");
         }
     }

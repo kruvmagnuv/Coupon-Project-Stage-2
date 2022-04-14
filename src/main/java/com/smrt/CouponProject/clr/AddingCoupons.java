@@ -8,21 +8,18 @@ import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.smrt.CouponProject.utils.HttpUtils.*;
 import static com.smrt.CouponProject.utils.DateUtils.*;
 import static com.smrt.CouponProject.utils.NumberUtils.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 
 @Component
 @Order(3)
 @RequiredArgsConstructor
 public class AddingCoupons implements CommandLineRunner {
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
 
     private final RestTemplate myRest;
     private Map<String, Object> map;
@@ -30,7 +27,6 @@ public class AddingCoupons implements CommandLineRunner {
     private String myJWT;
     private final String addCouponURL = "http://localhost:8080/company/addCoupon";
     private final String companyLoginURL = "http://localhost:8080/company/login";
-    private final String updateCouponURL="http://localhost:8080/company/updateCoupon";
 
     @Override
     public void run(String... args) throws Exception {
@@ -39,39 +35,19 @@ public class AddingCoupons implements CommandLineRunner {
         map.put("password", "shiri_the_queen");
         myRequest = getRequest(map);
         myJWT = myRest.postForObject(companyLoginURL, myRequest, String.class);
-        System.out.println(myJWT);
-
-        map=new HashMap<>();
 
         map = new HashMap<>();
         map.put("amount",getAmount());
         map.put("category","ELECTRICITY");
-        map.put("companyID",0);
-        map.put("description","TV at sale");
-        map.put("endDate",format.format(getEndDate()));
-        map.put("id",0);
+        map.put("description","A cheap computer");
+        map.put("endDate",getEndDate());
         map.put("image","images/coupons/coupon");
         map.put("price",getPrice());
-        map.put("startDate",format.format(getStartDate()));
-        map.put("title","TV");
+        map.put("startDate",getStartDate());
+        map.put("title","Computer");
         myRequest = getRequest(map, myJWT);
-        System.out.println(myRequest);
         myRest.postForEntity(addCouponURL, myRequest, Object.class);
 
-        map.put("amount",getAmount());
-        map.put("category",Category.ELECTRICITY.toString());
-        map.put("companyID",0);
-        map.put("description","TV at sale");
-        map.put("endDate",format.format(getEndDate()));
-        map.put("id",0);
-        map.put("image","images/coupons/coupon");
-        map.put("price",getPrice());
-        map.put("startDate",format.format(getStartDate()));
-        map.put("title","TV");
-
-        myRequest = getRequest(map,myJWT);
-        //myRest.postForEntity(updateCouponURL, myRequest, Object.class);
-        /*
         map = new HashMap<>();
         map.put("category", Category.ELECTRICITY);
         map.put("title", "TV");
@@ -101,7 +77,6 @@ public class AddingCoupons implements CommandLineRunner {
         map.put("password", "i_prefer_socks");
         myRequest = getRequest(map);
         myJWT = myRest.postForObject(companyLoginURL, myRequest, String.class);
-        System.out.println(myJWT);
 
         map = new HashMap<>();
         map.put("category", Category.FASHION);
@@ -144,7 +119,6 @@ public class AddingCoupons implements CommandLineRunner {
         map.put("password", "sirius_black");
         myRequest = getRequest(map);
         myJWT = myRest.postForObject(companyLoginURL, myRequest, String.class);
-        System.out.println(myJWT);
 
         map = new HashMap<>();
         map.put("category", Category.VACATION);
@@ -181,9 +155,5 @@ public class AddingCoupons implements CommandLineRunner {
         map.put("image", "http://images/image");
         myRequest = getRequest(map, myJWT);
         myRest.postForEntity(addCouponURL, myRequest, Object.class);
-*/
-
-
-
     }
 }
