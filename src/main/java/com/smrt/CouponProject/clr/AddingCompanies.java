@@ -38,6 +38,7 @@ public class AddingCompanies implements CommandLineRunner {
         map.put("password", "admin");
         myRequest = getRequest(map);
         String myJWT = myRest.postForObject(adminLoginURL, myRequest, String.class);
+        System.out.println(myJWT);
 
         map = new HashMap<>();
         map.put("name", "SMRT");

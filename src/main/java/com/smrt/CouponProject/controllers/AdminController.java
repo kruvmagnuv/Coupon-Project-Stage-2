@@ -76,19 +76,19 @@ public class AdminController {
     /**
      * deletes an existing company.
      * @param token is taken from the requestEntity's header, and used to validate the request.
-     * @param companyID ID of the company you wish to delete.
+     * @param companyId ID of the company you wish to delete.
      * @return Response entity with status:ACCEPTED.
      * @throws AdministrationException if company doesn't exist.
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
     @DeleteMapping("deleteCompany/{companyId}")
-    public ResponseEntity<?> deleteCompany(@RequestHeader(name = "Authorization") String token, @PathVariable int companyID) throws AdministrationException, LoginException, JwtException {
+    public ResponseEntity<?> deleteCompany(@RequestHeader(name = "Authorization") String token, @PathVariable int companyId) throws AdministrationException, LoginException, JwtException {
          UserDetails userDetails=jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
             throw new LoginException("Invalid User");
         }
-        adminService.deleteCompany(companyID);
+        adminService.deleteCompany(companyId);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -111,19 +111,19 @@ public class AdminController {
     /**
      * get a single company from the database.
      * @param token is taken from the requestEntity's header, and used to validate the request.
-     * @param companyID ID of the company.
+     * @param companyId ID of the company.
      * @return responseEntity with
      * @throws AdministrationException if company ID doesnt exist.
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
     @GetMapping("getCompany/{companyId}")
-    public ResponseEntity<?> getOneCompany(@RequestHeader(name = "Authorization") String token, @PathVariable int companyID) throws AdministrationException, LoginException, JwtException {
+    public ResponseEntity<?> getOneCompany(@RequestHeader(name = "Authorization") String token, @PathVariable int companyId) throws AdministrationException, LoginException, JwtException {
          UserDetails userDetails=jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
             throw new LoginException("Invalid User");
         }
-        return new ResponseEntity<>(adminService.getOneCompany(companyID), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.getOneCompany(companyId), HttpStatus.OK);
     }
 
     /**
@@ -165,19 +165,19 @@ public class AdminController {
     /**
      * deletes an existing customer, and all his coupon purchases from the database.
      * @param token is taken from the requestEntity's header, and used to validate the request.
-     * @param customerID ID of customer you wish to delete.
+     * @param customerId ID of customer you wish to delete.
      * @return ResponseEntity with status:ACCEPTED.
      * @throws AdministrationException if customer ID doesnt exist.
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
     @DeleteMapping("deleteCustomer/{customerId}")
-    public ResponseEntity<?> deleteCustomer(@RequestHeader(name = "Authorization") String token, @PathVariable int customerID) throws AdministrationException, LoginException, JwtException {
+    public ResponseEntity<?> deleteCustomer(@RequestHeader(name = "Authorization") String token, @PathVariable int customerId) throws AdministrationException, LoginException, JwtException {
          UserDetails userDetails=jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
             throw new LoginException("Invalid User");
         }
-        adminService.deleteCustomer(customerID);
+        adminService.deleteCustomer(customerId);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -200,18 +200,18 @@ public class AdminController {
     /**
      *  get a customer from the database.
      * @param token is taken from the requestEntity's header, and used to validate the request.
-     * @param customerID ID of the customer.
+     * @param customerId ID of the customer.
      * @return a customer.
      * @throws AdministrationException if no customer with such ID exists in the database.
      * @throws LoginException when role doesn't fit.
      * @throws JwtException when JWT isn't valid.
      */
     @GetMapping("getCustomer/{customerId}")
-    public ResponseEntity<?> getOneCustomer(@RequestHeader(name = "Authorization") String token, @PathVariable int customerID) throws AdministrationException, LoginException, JwtException {
+    public ResponseEntity<?> getOneCustomer(@RequestHeader(name = "Authorization") String token, @PathVariable int customerId) throws AdministrationException, LoginException, JwtException {
          UserDetails userDetails=jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
             throw new LoginException("Invalid User");
         }
-        return new ResponseEntity<>(adminService.getOneCustomer(customerID), HttpStatus.OK);
+        return new ResponseEntity<>(adminService.getOneCustomer(customerId), HttpStatus.OK);
     }
 }

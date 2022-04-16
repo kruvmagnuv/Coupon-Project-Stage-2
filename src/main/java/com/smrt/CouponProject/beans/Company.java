@@ -18,11 +18,11 @@ public class Company {
     private int id;
 
     // Company name
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20,unique = true)
     private String name;
 
     // Company email
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50,unique = true)
     private String email;
 
     // Company password

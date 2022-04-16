@@ -17,8 +17,7 @@ public class HttpUtils {
         for (Map.Entry<String,Object> item:map.entrySet()) {
             jsonObject.put(item.getKey(),item.getValue());
         }
-        HttpEntity<String> myRequest = new HttpEntity<>(jsonObject.toString(), headers);
-        return myRequest;
+        return new HttpEntity<>(jsonObject.toString(), headers);
     }
 
     public static HttpEntity<String> getRequest(Map<String,Object> map, String token) {
@@ -29,7 +28,14 @@ public class HttpUtils {
         for (Map.Entry<String,Object> item:map.entrySet()) {
             jsonObject.put(item.getKey(),item.getValue());
         }
-        HttpEntity<String> myRequest = new HttpEntity<>(jsonObject.toString(), headers);
-        return myRequest;
+        return new HttpEntity<>(jsonObject.toString(), headers);
+    }
+
+    public static HttpEntity<String> getRequest(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("Authorization",token);
+
+        return new HttpEntity<>(headers);
     }
 }

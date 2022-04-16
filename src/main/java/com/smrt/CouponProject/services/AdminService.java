@@ -31,10 +31,10 @@ public class AdminService extends ClientService {
     }
 
     /**
-     * this function creates a new company and adds her to the database
+     * this function creates a new company and adds it to the database
      * @param company a company.
      */
-    public void addCompany(Company company){
+    public void addCompany(Company company) {
 
         companyRepo.save(company);
     }
