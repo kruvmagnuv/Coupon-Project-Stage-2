@@ -14,6 +14,7 @@ import java.util.List;
 public class Company {
     // Company ID
     @Id
+    @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

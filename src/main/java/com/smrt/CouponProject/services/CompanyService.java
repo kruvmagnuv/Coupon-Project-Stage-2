@@ -3,6 +3,7 @@ package com.smrt.CouponProject.services;
 import com.smrt.CouponProject.beans.Category;
 import com.smrt.CouponProject.beans.Company;
 import com.smrt.CouponProject.beans.Coupon;
+import com.smrt.CouponProject.exceptions.AdministrationException;
 import com.smrt.CouponProject.exceptions.CompanyException;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,11 @@ public class CompanyService extends ClientService {
      * @param companyID ID of company using this method
      * @param coupon the coupon you want to create.
      */
-    public void addCoupon(int companyID,Coupon coupon)  {
+    public void addCoupon(int companyID,Coupon coupon) throws AdministrationException {
         coupon.setCompanyID(companyID);
+        if (couponRepo.findByCompanyIDAndTitle(companyID,coupon.getTitle()).isPresent()){
+            throw new AdministrationException("A coupon with this title already exists in your company.");
+        }
         couponRepo.save(coupon);
     }
 
@@ -45,7 +49,7 @@ public class CompanyService extends ClientService {
      * @param coupon specific coupon
      * @throws CompanyException if Coupon doesn't exist, or the coupon doesn't belong to your company.
      */
-    public void updateCoupon(int companyID,Coupon coupon) throws CompanyException {
+    public void updateCoupon(int companyID,Coupon coupon) throws CompanyException, AdministrationException {
         Optional<Coupon> coupon1 = couponRepo.findById(coupon.getId());
         if (coupon1.isEmpty()) {
             throw new CompanyException(COUPON_NOT_EXIST_EXCEPTION+UPDATE_EXCEPTION);
@@ -53,7 +57,18 @@ public class CompanyService extends ClientService {
         if (coupon1.get().getCompanyID()!=companyID){
             throw new CompanyException("Not your coupon.");
         }
-        couponRepo.saveAndFlush(coupon);
+        if (!(coupon.getTitle().equals(coupon1.get().getTitle()))&&couponRepo.existsCouponByCompanyIDAndTitle(companyID,coupon.getTitle())){
+            throw new AdministrationException("A coupon with this name already exists in your company.");
+        }
+        coupon1.get().setAmount(coupon.getAmount());
+        coupon1.get().setEndDate(coupon.getEndDate());
+        coupon1.get().setCategory(coupon.getCategory());
+        coupon1.get().setDescription(coupon.getDescription());
+        coupon1.get().setImage(coupon.getImage());
+        coupon1.get().setPrice(coupon.getPrice());
+        coupon1.get().setStartDate(coupon.getStartDate());
+        coupon1.get().setTitle(coupon.getTitle());
+        couponRepo.saveAndFlush(coupon1.get());
     }
 
     /**

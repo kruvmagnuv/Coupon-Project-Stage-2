@@ -78,7 +78,7 @@ public class CouponRestException {
      * @return Administration Exception
      */
     @ExceptionHandler(value = {AdministrationException.class})
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDetails handleAdminException(Exception err) {
         return new ErrorDetails("Administrator Error", err.getMessage());
     }

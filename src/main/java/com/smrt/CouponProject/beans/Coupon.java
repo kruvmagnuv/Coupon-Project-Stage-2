@@ -15,6 +15,7 @@ public class Coupon {
 
     // Coupon ID
     @Id
+    @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

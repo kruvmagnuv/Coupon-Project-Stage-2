@@ -7,10 +7,15 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CouponRepo extends JpaRepository<Coupon, Integer> {
     public List<Coupon> findByCompanyID(int companyID);
+
+    public boolean existsCouponByCompanyIDAndTitle(int companyID, String title);
+
+    public Optional<Coupon> findByCompanyIDAndTitle(int companyID, String title);
 
     public List<Coupon> findByCompanyIDAndCategory(int companyID, Category category);
 

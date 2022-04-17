@@ -44,7 +44,7 @@ public class AddingCustomers implements CommandLineRunner {
 
         map = new HashMap<>();
         map.put("firstName", "Shiri");
-        map.put("lastName", "Levy");
+        map.put("lastName", "Levi");
         map.put("email", "ShiriLevy@smrt.com");
         map.put("password", "shiri_the_queen");
         myRequest = getRequest(map, myJWT);

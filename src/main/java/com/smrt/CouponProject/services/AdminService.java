@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @NoArgsConstructor
@@ -45,10 +46,18 @@ public class AdminService extends ClientService {
      * @throws AdministrationException if the company's companyID doesnt exist.
      */
     public void updateCompany(Company company) throws AdministrationException {
-        if (!companyRepo.existsById(company.getId())) {
+        Optional<Company> company1= companyRepo.findById(company.getId());
+
+
+        if (company1.isEmpty()) {
             throw new AdministrationException(COMPANY_NOT_EXIST_EXCEPTION + UPDATE_EXCEPTION);
         }
-        companyRepo.save(company);
+        if (!company.getName().equals(company1.get().getName())){
+            throw new AdministrationException("You are not allowed to change the company name.");
+        }
+        company1.get().setEmail(company.getEmail());
+        company1.get().setPassword(company.getPassword());
+        companyRepo.save(company1.get());
     }
 
     /**

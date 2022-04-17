@@ -40,21 +40,21 @@ public class AddingCompanies implements CommandLineRunner {
         String myJWT = myRest.postForObject(adminLoginURL, myRequest, String.class);
         System.out.println(myJWT);
 
-        map = new HashMap<>();
+        map = new HashMap<>();  // company id 1
         map.put("name", "SMRT");
         map.put("email", "smrt@smrt.com");
         map.put("password", "shiri_the_queen");
         myRequest = getRequest(map, myJWT);
         myRest.postForEntity(addCompanyURL, myRequest, Object.class);
 
-        map = new HashMap<>();
+        map = new HashMap<>(); // company id 2
         map.put("name", "MatanShoes");
         map.put("email", "matanshoes@gmail.com");
         map.put("password", "i_prefer_socks");
         myRequest = getRequest(map, myJWT);
         myRest.postForEntity(addCompanyURL, myRequest, Object.class);
 
-        map = new HashMap<>();
+        map = new HashMap<>(); //company id 3
         map.put("name", "HarryPotter&Friends");
         map.put("email", "expelliarmus@j.k.rowling.com");
         map.put("password", "sirius_black");

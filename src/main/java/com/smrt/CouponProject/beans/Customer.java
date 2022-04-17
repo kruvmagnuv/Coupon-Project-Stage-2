@@ -15,6 +15,7 @@ public class Customer {
 
     // Customer ID
     @Id
+    @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -27,7 +28,7 @@ public class Customer {
     private String lastName;
 
     // Customer email
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50,unique = true)
     private String email;
 
     // Customer password

@@ -5,6 +5,7 @@ import com.smrt.CouponProject.beans.Category;
 import com.smrt.CouponProject.beans.Coupon;
 import com.smrt.CouponProject.beans.LoginDetails;
 import com.smrt.CouponProject.beans.UserDetails;
+import com.smrt.CouponProject.exceptions.AdministrationException;
 import com.smrt.CouponProject.exceptions.CompanyException;
 import com.smrt.CouponProject.exceptions.JwtException;
 import com.smrt.CouponProject.exceptions.LoginException;
@@ -55,7 +56,7 @@ public class CompanyController {
      * @throws JwtException when JWT isn't valid.
      */
     @PostMapping("addCoupon")
-    public ResponseEntity<?> addCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon coupon) throws LoginException, CompanyException, JwtException {
+    public ResponseEntity<?> addCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon coupon) throws LoginException, JwtException, AdministrationException {
         UserDetails userDetails = jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
             throw new LoginException("Invalid User");
@@ -74,7 +75,7 @@ public class CompanyController {
      */
     @PutMapping("updateCoupon")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public void updateCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon coupon) throws LoginException, CompanyException, JwtException {
+    public void updateCoupon(@RequestHeader(name = "Authorization") String token, @RequestBody Coupon coupon) throws LoginException, CompanyException, JwtException, AdministrationException {
         UserDetails userDetails = jwtUtils.validateToken(token);
         if (!userDetails.getRole().equals(role)) {
             throw new LoginException("Invalid User");
